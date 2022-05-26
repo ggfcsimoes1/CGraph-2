@@ -1,32 +1,30 @@
 /*
 Simple class that handles with the creation
-of boxes.
+of cylinders.
 */
-var box;
+var cylinder;
 
-class Box {
-    constructor ( x,y,z, width, length, height, color, xRot=0, yRot=0, zRot=0 ) {
+class Cylinder {
+    constructor ( x,y,z, radiusTop, radiusBottom, height, color, xRot=0, yRot=0, zRot=0 ) {
         this.x = x; //storing these for now, might remove later on
         this.y = y;
         this.z = z;
-        this.width = width;
-        this.length = length;
-        this.height = height;
+        this.radiusTop = radiusTop;
+        this.radiusBottom = radiusBottom;
+        this.height = height;    
         this.color = color;
         this.xRot = xRot;
         this.yRot = yRot;
         this.zRot = zRot;
         this.material = new THREE.MeshBasicMaterial ( { color: color, wireframe: false } );
-        this.geometry = new THREE.BoxGeometry ( width, length, height );
+        this.geometry = new THREE.CylinderGeometry ( radiusTop, radiusBottom, height );
         this.mesh = new THREE.Mesh ( this.geometry, this.material );
-        
-        box = new THREE.Object3D ( );
-        box.position.set ( x, y, z );
-        box.rotation.set( xRot, yRot, zRot);
-        box.add ( this.mesh );
 
-        this.obj3D = box;
-        
+        cylinder = new THREE.Object3D ( );
+        cylinder.position.set ( x, y, z );
+        cylinder.rotation.set( xRot, yRot, zRot);
+        cylinder.add ( this.mesh );
+        this.obj3D = cylinder;
     }
     //returns the created mesh
     getMesh() {

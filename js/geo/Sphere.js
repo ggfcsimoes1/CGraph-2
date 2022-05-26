@@ -18,7 +18,7 @@ class Sphere {
         this.geometry = new THREE.SphereGeometry ( radius, widthSegs, heightSegs );
         this.mesh = new THREE.Mesh ( this.geometry, this.material );
         
-        sphere = new THREE.Object3D ( );
+        let sphere = new THREE.Object3D ( );
         sphere.position.set ( x, y, z );
         sphere.rotation.set( xRot, yRot, zRot);
         sphere.add ( this.mesh );

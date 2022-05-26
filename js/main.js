@@ -9,7 +9,7 @@ var scene, renderer, currentCamera;
 
 var geometry, material, mesh;
 
-var box, pyramid, cone, sphere, torus;
+var sphereRadius = 250;
 
 /*Colors that will be used in the materials
 Respectively, blue, cyan, magenta, yellow, green*/
@@ -36,119 +36,6 @@ let keys = {
     rightArrow : false,
     upArrow : false,
     downArrow : false
-}
-
-/*Creates four cubes and a sphere*/
-function createObject0( x, y, z, size ) {
-    'use strict';
-
-    const group = new THREE.Group ( );
-    
-    //For cycle, which creates four cubes varying the x and y coordinates
-    for ( var i = 0; i < 5; i++ ) {
-        var xAux = 0, yAux = 0;
-
-        switch ( i ){
-            case 0:
-                xAux = ( size+10 );
-                break;
-            case 1:
-                yAux = -( size+10 );
-                break;
-            case 2:
-                break;
-            case 3:
-                yAux = ( size+10 );
-                break;
-            case 4:
-                xAux = -( size+10 );
-                break;
-        }
-        
-        box = new Box(xAux, yAux, 0, size, size, size, colors[i]);
-        group.add ( box.getObj3D() );
-        
-    }
-
-    sphere = new Sphere ( -(size*3/2 + 10), -size/2, size/2, size/4, 20, 7, colors[1] );
-    group.add ( sphere.getObj3D() );
-
-    group.position.set ( x, y, z );
-
-    scene.add(group);    
-}
-
-/* Creates a pyramid, cone and sphere, they are added in the articulated object */
-function createObject1( x, y, z, radius, height, segs ) {
-    'use strict';
-    
-    articulateObj = new THREE.Group ( );
-
-    pyramid = new Cone( 0, 125, 0, radius/2, height/4, 4, colors[2] );
-    articulateObj.add ( pyramid.getObj3D() );
-
-    cone = new Cone( 0, 0, 0, radius, height, segs, colors[0] );
-    articulateObj.add ( cone.getObj3D() );
-    
-    sphere = new Sphere ( 0, - ( height - 30 ), 0,radius, segs, segs, colors[1] );
-    articulateObj.add ( sphere.getObj3D() )
-    
-
-    createObject2(300, 0, 0, 50, 20);
-
-    articulateObj.position.set ( x, y, z );
-    articulateObj.rotateZ(THREE.MathUtils.degToRad(160));
-
-    scene.add ( articulateObj );
-
-    //Add a new axis acording to the coordinates of the articulated object
-    axis.push(new THREE.Vector3(articulateObj.position.x, articulateObj.position.y, articulateObj.position.z));
-}
-
-/*Creates two cones, sphere and a parallelpiped, added in the articulated object*/
-function createObject2(x, y, z, radius, segs ) {
-    'use strict';
-
-    const group = new THREE.Group ( );
-
-    sphere = new Sphere ( 0, 0, 0,radius, segs, segs, colors[3] );
-    group.add ( sphere.getObj3D() );
-
-    box = new Box ( 0, 0, 0, 3/2 * radius, 3.5 * radius, 20, colors[1], 0.5, 0, 0 );
-    group.add( box.getObj3D() );
-
-    pyramid = new Cone( 100, 0, 0, radius/3, radius/2, 4, colors[2] );
-    group.add ( pyramid.getObj3D() );
-
-    pyramid = new Cone( -100, 0, 0, radius/3, -radius/2, 4, colors[2] );
-    group.add ( pyramid.getObj3D() );
-
-    group.position.set ( x, y, z );
-    articulateObj.add ( group );
-}
-
-/*Create a pyramid and two torus*/
-function createObject3(x, y, z, radius, segs, height) {
-    'use strict';
-
-    const group = new THREE.Group ( );
-
-    pyramid = new Cone( 0, 0, 0, height/13, height, 4, colors[2], THREE.MathUtils.degToRad(45), 0, THREE.MathUtils.degToRad(-90) );
-    group.add ( pyramid.getObj3D() );
-
-    torus = new Torus( 40, 0, 0, radius*1.5, radius/5, segs, segs, colors[3], 0, THREE.MathUtils.degToRad(-90), 0 );
-    group.add ( torus.getObj3D() );
-
-    torus = new Torus( 110, 0, 0, radius, radius/5, segs, segs, colors[0], 0, THREE.MathUtils.degToRad(-90), 0 );
-    group.add ( torus.getObj3D() );
-
-
-    box = new Box ( -height/2, height/13, 0, height/15, height/15, height/15, colors[1], 0, 0, THREE.MathUtils.degToRad(45) );
-    group.add( box.getObj3D() );
-
-    group.position.set ( x, y, z );
-
-    scene.add ( group );
 }
 
 /*Function responsible for rotating objects of the group*/
@@ -203,15 +90,15 @@ function moveObjects(node,direction){
     } 
 }
 
-/*Function responsible for create all the objects and scene*/
+/*Function responsible for creating all the objects and scene*/
 function createScene() {
     'use strict';
 
-    scene = new THREE.Scene();
-    
-    createObject0( 300, 50, 25, 50 );
-    createObject1( 100, 100, -200, 35, 200, 20 );
-    createObject3(-300, -250, 100, 50, 30, 450);
+    scene = new THREE.Scene ( ) ;
+    planet = new Planet ( 0,0,0, sphereRadius, 8, 8, colors );
+    ship = new Ship(0,sphereRadius*1.2,0, sphereRadius/10, 200, 8, colors, 0, 0 , THREE.MathUtils.degToRad(-90));
+    scene.add(planet.getGroup());
+    scene.add(ship.getGroup());
 
 }
 
