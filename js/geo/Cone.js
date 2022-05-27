@@ -2,6 +2,9 @@
 Simple class that handles with the creation
 of cones.
 */
+
+var cone;
+
 class Cone {
     constructor ( x,y,z, radius, height, radSegs, color, xRot=0, yRot=0, zRot=0 ) {
         this.x = x; //storing these for now, might remove later on

@@ -19,6 +19,8 @@ var articulateObj;
 
 var articulateObjCoords;
 
+var thrashForms = ["Box", "Cone"];
+
 var axis = [];
 
 //auxiliary object that holds the pressed 
@@ -97,8 +99,10 @@ function createScene() {
     scene = new THREE.Scene ( ) ;
     planet = new Planet ( 0,0,0, sphereRadius, 8, 8, colors );
     ship = new Ship(0,sphereRadius*1.2,0, sphereRadius/10, 200, 8, colors, 0, 0 , THREE.MathUtils.degToRad(-90));
+    thrash = new Thrash( 0,0,0, sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20, 0, 0, THREE.MathUtils.degToRad( Math.random() * 360));
     scene.add(planet.getGroup());
     scene.add(ship.getGroup());
+    scene.add(thrash.getGroup());
 
 }
 
