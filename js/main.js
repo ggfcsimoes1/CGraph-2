@@ -7,33 +7,17 @@ var clock = new THREE.Clock();
 
 var scene, renderer, currentCamera;
 
-var geometry, material, mesh;
-
 var sphereRadius = 250;
 
 /*Colors that will be used in the materials
 Respectively, blue, cyan, magenta, yellow, green*/
 var colors = [0x0000FF,0x00FFFF,0xFF00FF,0xFFFF00, 0x00FF00];
 
-var articulateObj;
-
-var articulateObjCoords;
-
-var thrashForms = ["Box", "Cone"];
-
-var axis = [];
+var thrashForms = ["Box", "Cone"];//--------------------------------change place
 
 //auxiliary object that holds the pressed 
 //status of every key used in the program
 let keys = {
-    Q : false,
-    W : false,
-    A : false,
-    S : false,
-    Z : false,
-    X : false,
-    C : false,
-    D : false,
     leftArrow : false,
     rightArrow : false,
     upArrow : false,
@@ -67,42 +51,19 @@ function rotateObjects(group, clock_delta, reverseDirection=false, articulate = 
     
 }
 
-/*Function responsible for translation movements*/
-function moveObjects(node,direction){
-    'use strict'
-    switch ( direction ) {
-        case "up":
-            node.position.y += 10;
-            break;
-        case "down":
-            node.position.y -= 10;
-            break;
-        case "left":
-            node.position.x -= 10;
-            break;
-        case "right":
-            node.position.x += 10;
-            break;
-        case "forward":
-            node.position.z += 10;
-            break;
-        case "backward":
-            node.position.z -= 10;
-            break;
-    } 
-}
-
 /*Function responsible for creating all the objects and scene*/
 function createScene() {
     'use strict';
 
     scene = new THREE.Scene ( ) ;
+
     planet = new Planet ( 0,0,0, sphereRadius, 8, 8, colors );
-    ship = new Ship(0,sphereRadius*1.2,0, sphereRadius/10, 200, 8, colors, 0, 0 , THREE.MathUtils.degToRad(-90));
-    thrash = new Thrash( 0,0,0, sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20, 0, 0, THREE.MathUtils.degToRad( Math.random() * 360));
+    ship = new Ship(0,sphereRadius*1.2,0, sphereRadius/5, 8, colors, THREE.MathUtils.degToRad(90), 0 , 0); // -------------Fix height
+    //thrash = new Thrash( 0,0,0, sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20, 0, 0, 0);
+
     scene.add(planet.getGroup());
     scene.add(ship.getGroup());
-    scene.add(thrash.getGroup());
+    //scene.add(thrash.getGroup());
 
 }
 
@@ -205,30 +166,6 @@ function onKeyDown(e) {
         toggleWireframe();
         console.log("wireframe view");
         break;
-    case 81: //Q
-        keys.Q = true
-        console.log("Q key press");
-        break;
-    case 87: //W
-        keys.W = true
-        console.log("W key press");
-        break;
-    case 65: //A
-        keys.A = true
-        console.log("A key press");
-        break;
-    case 83: //S
-        keys.S = true
-        console.log("S key press");
-        break;
-    case 90: //Z
-        keys.Z = true
-        console.log("Z key press");
-        break;
-    case 88: //X
-        keys.X = true
-        console.log("X key press");
-        break;
     case 37: //left arrow
         keys.leftArrow = true
         console.log("Left arrow key press"); 
@@ -245,14 +182,6 @@ function onKeyDown(e) {
         keys.downArrow = true
         console.log("Down arrow key press"); 
         break;  
-    case 68: //d
-        keys.D = true 
-        console.log("D key press"); 
-        break;
-    case 67: //c
-        keys.C = true
-        console.log("C key press"); 
-        break;
     }
 }
 
@@ -261,24 +190,6 @@ function onKeyUp(e) {
     'use strict';
 
     switch (e.keyCode) {
-    case 81: //Q
-        keys.Q = false;
-        break;
-    case 87: //W
-        keys.W = false;
-        break;
-    case 65: //A
-        keys.A = false;
-        break;
-    case 83: //S
-        keys.S = false;
-        break;
-    case 90: //Z
-        keys.Z = false;
-        break;
-    case 88: //X
-        keys.X = false;
-        break;
     case 37: //left arrow
         keys.leftArrow = false;
         break;
@@ -290,12 +201,6 @@ function onKeyUp(e) {
         break;
     case 40: //down arrow
         keys.downArrow = false;
-        break;  
-    case 68: //d
-        keys.D = false; 
-        break;
-    case 67: //c
-        keys.C = false;
         break;
     }
 }
@@ -307,37 +212,14 @@ function checkForMovements() {
     //Get current time
     var delta = clock.getDelta();
 
-    var groupList = [];
-    scene.traverse(function (node) {
-        if (node instanceof THREE.Group) {
-            groupList.push(node);
-        }
-    });
-
-    if ( keys.Q )
-        rotateObjects( articulateObj, delta, false, true );
-    if ( keys.W )
-        rotateObjects( articulateObj, delta, true, true );
-    if ( keys.A )
-        rotateObjects( groupList[2], delta );
-    if ( keys.S )
-        rotateObjects( groupList[2], delta , true );
-    if ( keys.Z )
-        rotateObjects( groupList[2], delta , false, false, true );
-    if ( keys.X )
-        rotateObjects( groupList[2], delta , true, false, true );
     if ( keys.leftArrow )
-        moveObjects( articulateObj,"left" );
+        ship.moveObject( "left", delta);
     if ( keys.rightArrow )
-        moveObjects( articulateObj,"right" );
+        ship.moveObject( "right", delta );
     if ( keys.upArrow )
-        moveObjects( articulateObj,"up" );
+        ship.moveObject( "up", delta );
     if ( keys.downArrow )
-        moveObjects( articulateObj,"down" );
-    if ( keys.D )
-        moveObjects( articulateObj,"forward" );
-    if ( keys.C )
-        moveObjects( articulateObj,"backward" );
+        ship.moveObject( "down", delta );
 
 }
 
