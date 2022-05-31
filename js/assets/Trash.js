@@ -14,6 +14,7 @@ class Trash{
         this.xRot = xRot;
         this.yRot = yRot;
         this.zRot = zRot;
+		this.boundingSpheres = [];
 
 		this.group = new THREE.Group ( );
 
@@ -33,10 +34,12 @@ class Trash{
 				case "Box":
 					let box = new Box(chosenX, chosenY , chosenZ, chosenWidth, chosenWidth, chosenWidth, chosenColor);
 					this.group.add ( box.getObj3D() );
+					this.boundingSpheres.push(box.geometry.computeBoundingSphere());
 					break;
 				case "Cone":
 					let cone = new Cone(chosenX, chosenY , chosenZ, chosenWidth, chosenWidth, chosenWidth, chosenColor);
 					this.group.add ( cone.getObj3D() );
+					this.boundingSpheres.push(cone.geometry.computeBoundingSphere());
 					break;
 			}
 
@@ -45,15 +48,11 @@ class Trash{
 		this.group.rotation.set(xRot, yRot, zRot);
 
 	}
+	//returns the object's bounding box
+	getBoundingBox(){
+		return this.boundingSpheres;
+	}
 
-	//returns the created mesh
-	getMesh() {
-		return this.mesh;
-	}
-	//returns the Object3D instance
-	getObj3D() {
-		return this.obj3D;
-	}
 	//returns the object's color
 	getColor() {
 		return this.color;

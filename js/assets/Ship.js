@@ -7,13 +7,14 @@ which are aligned with eachother.
 var ship;
 
 class Ship {
-    constructor ( theta, phi , radius, height, segs, colors) {
+    constructor ( theta, phi , radius, height, segs, colors ) {
         this.bodyHeight = height/2;
         this.noseHeight = height/4;
         this.capsuleHeight = height/4;
         this.cylinderRadius = height/7;
         this.segs = segs;
         this.colors = colors;
+        
 
         this.group = new THREE.Group ( );
     
@@ -40,16 +41,12 @@ class Ship {
 
         this.setPositionSpherical(theta, phi, radius);
 
-        this.group.computeBoundingBox();
+        this.boundingSphere = this.body.geometry.computeBoundingSphere();
         
     }
-    //returns the created mesh
-    getMesh() {
-        return this.mesh;
-    }
-    //returns the Object3D instance
-    getObj3D() {
-        return this.obj3D;
+    //returns the object's bounding box
+    getBoundingSphere(){
+        return this.boundingSphere;
     }
     //returns the object's color
     getColor() {
@@ -59,7 +56,14 @@ class Ship {
     getGroup() {
         return this.group;
     }
-
+    //returns the created mesh
+    getMesh() {
+        return this.mesh;
+    }
+    //returns the Object3D instance
+    getObj3D() {
+        return this.obj3D;
+    }
     setPositionSpherical(theta, phi, radius) {
         this.theta = theta;
         this.phi = phi;
@@ -86,6 +90,8 @@ class Ship {
                 this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
                 break;
         } 
+        console.log(this.theta)
+        console.log(this.phi)
         this.group.lookAt(0,0,0);
 }
 }

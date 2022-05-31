@@ -223,6 +223,17 @@ function checkForMovements() {
 
 }
 
+function checkForCollisions(){
+    shipCollider = ship.getBoundingSphere();
+    trashColliders = trash.getBoundingSphere();
+    for (i = 0; i < trashColliders.length(); i++ ){
+        if ( trashColliders[i].intersectsBox(shipCollider) ){
+            console.log("hi");
+            break;
+        } 
+    }
+}
+
 /*Shows the output in the browser according to the camera*/
 function render() {
     'use strict';
