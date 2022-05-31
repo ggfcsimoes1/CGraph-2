@@ -1,9 +1,9 @@
 /*
-Thrash created in the game
+trash created in the game
 */
-var thrash;
+var trash;
 
-class Thrash{
+class Trash{
 	constructor ( x,y,z, dist, minWidth, maxWidth, numObjs=20, xRot=0, yRot=0, zRot=0 ) {
 		this.x = x;
         this.y = y;
@@ -19,7 +19,7 @@ class Thrash{
 
 		for(let i = 1; i <= numObjs; i++){
 
-			let chosenForm = thrashForms[ Math.floor( Math.random() * thrashForms.length )];
+			let chosenForm = trashForms[ Math.floor( Math.random() * trashForms.length )];
 			let chosenColor = colors[ Math.floor( Math.random() * colors.length )];
 			let chosenWidth = Math.random() * ( maxWidth - minWidth ) + minWidth;
 

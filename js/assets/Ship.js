@@ -40,11 +40,7 @@ class Ship {
 
         this.setPositionSpherical(theta, phi, radius);
 
-        /* this.XrotationGroup.add(this.group);
-        this.YrotationGroup.add(this.XrotationGroup);
-
-        this.XrotationGroup.rotateX(THREE.MathUtils.degToRad(Math.random()*360));
-        this.YrotationGroup.rotateY(THREE.MathUtils.degToRad(Math.random()*360)); */
+        this.group.computeBoundingBox();
         
     }
     //returns the created mesh
@@ -68,21 +64,6 @@ class Ship {
         this.theta = theta;
         this.phi = phi;
         this.radius = radius;
-
-        /* this.zVar_Theta = radius * Math.sin(phi) * (Math.cos(theta + delta) - Math.cos(theta));
-        this.zVar_Theta_neg = radius * Math.sin(phi) * (Math.cos(theta - delta) - Math.cos(theta));
-        this.zVar_Phi = radius * Math.cos(theta) * (Math.sin(phi + delta) - Math.sin(phi));
-        this.zVar_Phi_neg = radius * Math.cos(theta) * (Math.sin(phi - delta) - Math.sin(phi));
-        
-
-        this.xVar_Theta = radius * Math.sin(phi) * (Math.sin(theta + delta) - Math.sin(theta));
-        this.xVar_Theta_neg = radius * Math.sin(phi) * (Math.sin(theta - delta) - Math.sin(theta));
-        this.xVar_Phi = radius * Math.sin(theta) * (Math.sin(phi + delta) - Math.sin(phi));
-        this.xVar_Phi_neg = radius * Math.sin(theta) * (Math.sin(phi - delta) - Math.sin(phi));
-
-        this.xVar_Phi = radius * (Math.cos(phi + delta) - Math.cos(phi));
-        this.xVar_Phi_neg = radius * (Math.cos(phi - delta) - Math.cos(phi)); */
-
         this.group.position.z = radius * Math.sin(phi) * Math.cos(theta);
         this.group.position.x = radius * Math.sin(theta) * Math.sin(phi);
         this.group.position.y = radius * Math.cos(phi);
@@ -93,27 +74,18 @@ class Ship {
 
         switch ( direction ) {
             case "up":
-                /* this.group.position.z += this.zVar_Phi_neg;
-                this.group.position.x += this.xVar_Phi_neg;
-                this.group.position.y += this.yVar_Phi_neg; */
                 this.setPositionSpherical(this.theta , this.phi - THREE.MathUtils.degToRad(clock_delta * 70), this.radius);
                 break;
             case "down":
-                /* this.group.position.z += this.zVar_Phi;
-                this.group.position.x += this.xVar_Phi;
-                this.group.position.y += this.yVar_Phi; */
                 this.setPositionSpherical(this.theta , this.phi + THREE.MathUtils.degToRad(clock_delta * 70), this.radius);
                 break;
             case "left":
-                /* this.group.position.z += this.zVar_Theta;
-                this.group.position.x += this.xVar_Theta; */
                 this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
                 break;
             case "right":
-                /* this.group.position.z += this.zVar_Theta_neg;
-                this.group.position.x += this.xVar_Theta_neg; */
                 this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
                 break;
         } 
+        this.group.lookAt(0,0,0);
 }
 }
