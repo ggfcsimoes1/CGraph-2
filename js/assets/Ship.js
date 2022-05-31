@@ -7,21 +7,15 @@ which are aligned with eachother.
 var ship;
 
 class Ship {
-    constructor ( x,y,z, height, segs, colors, xRot=0, yRot=0, zRot=0 ) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    constructor ( theta, phi , radius, height, segs, colors) {
         this.bodyHeight = height/2;
         this.noseHeight = height/4;
         this.capsuleHeight = height/4;
         this.cylinderRadius = height/7;
         this.segs = segs;
         this.colors = colors;
-        this.setRotation(xRot, yRot, zRot);
 
         this.group = new THREE.Group ( );
-        this.XrotationGroup = new THREE.Group();
-        this.YrotationGroup = new THREE.Group();
     
         this.body = new Cylinder ( 0, 0, 0, this.cylinderRadius, this.cylinderRadius, this.bodyHeight, this.colors[1], 0, 0, 0);
         this.group.add ( this.body.getObj3D() );
@@ -42,14 +36,15 @@ class Ship {
         this.group.add ( jet4.getObj3D() );
 
         this.group.rotateX(THREE.MathUtils.degToRad(90));
+        this.group.rotateZ(THREE.MathUtils.degToRad(90));
 
-        this.group.position.set(x,y,z);
+        this.setPositionSpherical(theta, phi, radius);
 
-        this.XrotationGroup.add(this.group);
+        /* this.XrotationGroup.add(this.group);
         this.YrotationGroup.add(this.XrotationGroup);
 
         this.XrotationGroup.rotateX(THREE.MathUtils.degToRad(Math.random()*360));
-        this.YrotationGroup.rotateY(THREE.MathUtils.degToRad(Math.random()*360));
+        this.YrotationGroup.rotateY(THREE.MathUtils.degToRad(Math.random()*360)); */
         
     }
     //returns the created mesh
@@ -66,13 +61,31 @@ class Ship {
     }
     //returns the group created in the constructor
     getGroup() {
-        return this.YrotationGroup;
+        return this.group;
     }
 
-    setRotation(x, y, z) {
-        this.xRot = x;
-        this.yRot = y;
-        this.zRot = z;
+    setPositionSpherical(theta, phi, radius) {
+        this.theta = theta;
+        this.phi = phi;
+        this.radius = radius;
+
+        /* this.zVar_Theta = radius * Math.sin(phi) * (Math.cos(theta + delta) - Math.cos(theta));
+        this.zVar_Theta_neg = radius * Math.sin(phi) * (Math.cos(theta - delta) - Math.cos(theta));
+        this.zVar_Phi = radius * Math.cos(theta) * (Math.sin(phi + delta) - Math.sin(phi));
+        this.zVar_Phi_neg = radius * Math.cos(theta) * (Math.sin(phi - delta) - Math.sin(phi));
+        
+
+        this.xVar_Theta = radius * Math.sin(phi) * (Math.sin(theta + delta) - Math.sin(theta));
+        this.xVar_Theta_neg = radius * Math.sin(phi) * (Math.sin(theta - delta) - Math.sin(theta));
+        this.xVar_Phi = radius * Math.sin(theta) * (Math.sin(phi + delta) - Math.sin(phi));
+        this.xVar_Phi_neg = radius * Math.sin(theta) * (Math.sin(phi - delta) - Math.sin(phi));
+
+        this.xVar_Phi = radius * (Math.cos(phi + delta) - Math.cos(phi));
+        this.xVar_Phi_neg = radius * (Math.cos(phi - delta) - Math.cos(phi)); */
+
+        this.group.position.z = radius * Math.sin(phi) * Math.cos(theta);
+        this.group.position.x = radius * Math.sin(theta) * Math.sin(phi);
+        this.group.position.y = radius * Math.cos(phi);
     }
 
     /*Function responsible for translation movements*/
@@ -80,24 +93,26 @@ class Ship {
 
         switch ( direction ) {
             case "up":
-                this.XrotationGroup.rotateX( clock_delta );
-                this.group.rotation.x = THREE.MathUtils.degToRad(90);
-                this.group.rotation.z = THREE.MathUtils.degToRad(0);
+                /* this.group.position.z += this.zVar_Phi_neg;
+                this.group.position.x += this.xVar_Phi_neg;
+                this.group.position.y += this.yVar_Phi_neg; */
+                this.setPositionSpherical(this.theta , this.phi - THREE.MathUtils.degToRad(clock_delta * 70), this.radius);
                 break;
             case "down":
-                this.XrotationGroup.rotateX( -clock_delta);
-                this.group.rotation.x = THREE.MathUtils.degToRad(-90);
-                this.group.rotation.z = THREE.MathUtils.degToRad(0);
+                /* this.group.position.z += this.zVar_Phi;
+                this.group.position.x += this.xVar_Phi;
+                this.group.position.y += this.yVar_Phi; */
+                this.setPositionSpherical(this.theta , this.phi + THREE.MathUtils.degToRad(clock_delta * 70), this.radius);
                 break;
             case "left":
-                this.YrotationGroup.rotateY( -clock_delta );
-                this.group.rotation.z = THREE.MathUtils.degToRad(-90);
-                this.group.rotation.x = THREE.MathUtils.degToRad(0);
+                /* this.group.position.z += this.zVar_Theta;
+                this.group.position.x += this.xVar_Theta; */
+                this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
                 break;
             case "right":
-                this.YrotationGroup.rotateY( clock_delta );
-                this.group.rotation.z = THREE.MathUtils.degToRad(90);
-                this.group.rotation.x = THREE.MathUtils.degToRad(0);
+                /* this.group.position.z += this.zVar_Theta_neg;
+                this.group.position.x += this.xVar_Theta_neg; */
+                this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
                 break;
         } 
 }
