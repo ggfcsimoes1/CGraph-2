@@ -61,7 +61,7 @@ function createScene() {
 
     planet = new Planet ( 0,0,0, sphereRadius, 30, 30, colors );
     ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/5, 8, colors, cameraRadius); // -------------Fix height
-    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20);
+    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 200);
 
     scene.add(planet.getGroup());
     scene.add(ship.getGroup());
@@ -216,8 +216,8 @@ function checkForMovements() {
 }
 
 function wasCollision(obj1, ship){
-    obj1Position = obj1.getObj3D().position;
-    shipPosition = ship.getGroup().position;
+    const obj1Position = obj1.getObj3D().position;
+    const shipPosition = ship.getGroup().position;
 
     return  ( obj1.getBoundaryRadius() + ship.getBoundaryRadius() ) ** 2 >= 
             (obj1Position.x - shipPosition.x) ** 2 + 
@@ -227,7 +227,7 @@ function wasCollision(obj1, ship){
 
 function checkForCollisions(){
     let quadrant;
-    const shipObj = ship.getGroup();
+    let shipObj = ship.getGroup();
     if(shipObj.position.y >= 0) {
         if(shipObj.position.x >=0) {
             quadrant = trash.quadrants["north-east"];
@@ -242,11 +242,11 @@ function checkForCollisions(){
         }
     }
 
-    for ( i = 0; i < quadrant.length; i++ )
-    if ( wasCollision(quadrant[i], ship) ){
-        console.log("collision");
-        quadrant[i].getMesh().visible = false;
-        quadrant.pop(quadrant[i])
+    for ( i = 0; i < quadrant.length; i++ ){
+        if ( wasCollision(quadrant[i], ship) ){
+            quadrant[i].getMesh().visible = false;
+            quadrant.splice(i, 1);
+        }
     }
  
     

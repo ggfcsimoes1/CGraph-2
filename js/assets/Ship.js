@@ -99,6 +99,6 @@ class Ship {
                 this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
                 break;
         } 
-        /* this.group.lookAt(0,0,0); */
+        this.group.lookAt(0,0,0);
 }
 }
