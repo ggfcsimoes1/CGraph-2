@@ -60,8 +60,8 @@ function createScene() {
     scene = new THREE.Scene ( ) ;
 
     planet = new Planet ( 0,0,0, sphereRadius, 30, 30, colors );
-    ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/5, 8, colors); // -------------Fix height
-    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 1);
+    ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/5, 8, colors, cameraRadius); // -------------Fix height
+    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20);
 
     scene.add(planet.getGroup());
     scene.add(ship.getGroup());
@@ -88,8 +88,6 @@ function createCamera() {
     camera.lookAt( scene.position );
     cameras.push( camera );
 
-    cameras.push( new MovCamera(ship.theta + THREE.MathUtils.degToRad(30), ship.phi, cameraRadius, ship.getGroup().position));
-
     currentCamera = cameras[0];
 }
 
@@ -106,7 +104,7 @@ function changePerspective(view){
             currentCamera.lookAt(scene.position);
             break;
         case "ship":
-            currentCamera = cameras[2].getCamera();
+            currentCamera = ship.getCamera()
             currentCamera.lookAt(scene.position);
             break;
     }
@@ -206,13 +204,13 @@ function checkForMovements() {
     var delta = clock.getDelta();
 
     if ( keys.leftArrow )
-        ship.moveObject( "left", delta, cameras[2]);
+        ship.moveObject( "left", delta);
     if ( keys.rightArrow )
-        ship.moveObject( "right", delta, cameras[2]);
+        ship.moveObject( "right", delta);
     if ( keys.upArrow )
-        ship.moveObject( "up", delta, cameras[2]);
+        ship.moveObject( "up", delta);
     if ( keys.downArrow )
-        ship.moveObject( "down", delta, cameras[2]);
+        ship.moveObject( "down", delta);
 
     
 }
