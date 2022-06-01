@@ -41,12 +41,15 @@ class Ship {
 
         this.setPositionSpherical(theta, phi, radius);
 
-        this.boundingSphere = this.body.geometry.computeBoundingSphere();
+        this.body.geometry.computeBoundingSphere()
+        this.BSphere = new THREE.Sphere( this.group.position, this.body.geometry.boundingSphere.radius );
+
+        this.group.add(this.BSphere);
         
     }
     //returns the object's bounding box
     getBoundingSphere(){
-        return this.boundingSphere;
+        return this.BSphere;
     }
     //returns the object's color
     getColor() {
@@ -74,24 +77,38 @@ class Ship {
     }
 
     /*Function responsible for translation movements*/
-    moveObject(direction, clock_delta){
+    moveObject(direction, clock_delta, movCamera){
 
         switch ( direction ) {
             case "up":
                 this.setPositionSpherical(this.theta , this.phi - THREE.MathUtils.degToRad(clock_delta * 70), this.radius);
+                movCamera.setPositionSpherical(movCamera.theta, 
+                                                movCamera.phi - THREE.MathUtils.degToRad(clock_delta * 70), 
+                                                movCamera.radius, 
+                                                this.group.position);
                 break;
             case "down":
                 this.setPositionSpherical(this.theta , this.phi + THREE.MathUtils.degToRad(clock_delta * 70), this.radius);
+                movCamera.setPositionSpherical(movCamera.theta, 
+                                                movCamera.phi + THREE.MathUtils.degToRad(clock_delta * 70), 
+                                                movCamera.radius, 
+                                                this.group.position);
                 break;
             case "left":
                 this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
+                movCamera.setPositionSpherical(movCamera.theta - THREE.MathUtils.degToRad(clock_delta * 70), 
+                                                movCamera.phi, 
+                                                movCamera.radius, 
+                                                this.group.position);
                 break;
             case "right":
                 this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 70), this.phi , this.radius);
+                movCamera.setPositionSpherical(movCamera.theta + THREE.MathUtils.degToRad(clock_delta * 70),
+                                                movCamera.phi, 
+                                                movCamera.radius, 
+                                                this.group.position);
                 break;
         } 
-        console.log(this.theta)
-        console.log(this.phi)
-        this.group.lookAt(0,0,0);
+        /* this.group.lookAt(0,0,0); */
 }
 }

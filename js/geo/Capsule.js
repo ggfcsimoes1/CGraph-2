@@ -37,4 +37,10 @@ class Capsule {
     getColor() {
         return this.color;
     }
+
+    setPositionSpherical(theta, phi, radius) {
+        this.obj3D.position.z = radius * Math.sin(phi) * Math.cos(theta);
+        this.obj3D.position.x = radius * Math.sin(theta) * Math.sin(phi);
+        this.obj3D.position.y = radius * Math.cos(phi);
+    }
 }

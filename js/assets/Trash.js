@@ -4,52 +4,66 @@ trash created in the game
 var trash;
 
 class Trash{
-	constructor ( x,y,z, dist, minWidth, maxWidth, numObjs=20, xRot=0, yRot=0, zRot=0 ) {
-		this.x = x;
-        this.y = y;
-        this.z = z;
+	constructor ( dist, minWidth, maxWidth, numObjs=20) {
         this.dist = dist;
         this.minWidth = minWidth;
 		this.maxWidth = maxWidth;
-        this.xRot = xRot;
-        this.yRot = yRot;
-        this.zRot = zRot;
-		this.boundingSpheres = [];
+
+		this.quadrants = {	"north-west": [], 
+							"north-east": [], 
+							"south-west": [], 
+							"south-east": []
+						};
 
 		this.group = new THREE.Group ( );
 
 		for(let i = 1; i <= numObjs; i++){
 
 			let chosenForm = trashForms[ Math.floor( Math.random() * trashForms.length )];
-			let chosenColor = colors[ Math.floor( Math.random() * colors.length )];
-			let chosenWidth = Math.random() * ( maxWidth - minWidth ) + minWidth;
+			let color = colors[ Math.floor( Math.random() * colors.length )];
+			let width = Math.random() * ( maxWidth - minWidth ) + minWidth;
 
-			let chosenX = Math.random() *  (2 * dist ) - dist;
-			let maxY = Math.sqrt(( dist * dist ) - ( chosenX * chosenX ));
-			let chosenY = Math.random() * (2 * maxY) - maxY;
-			let absoluteZ = Math.sqrt(( dist * dist ) - ( chosenX * chosenX ) - ( chosenY * chosenY ));
-			let chosenZ = Math.random() < 0.5 ? absoluteZ : absoluteZ * -1;
+			let theta = THREE.MathUtils.degToRad(Math.random() * 360);
+			let phi = THREE.MathUtils.degToRad(Math.random() * 360);
 
+			let obj;
 			switch(chosenForm){
 				case "Box":
-					let box = new Box(chosenX, chosenY , chosenZ, chosenWidth, chosenWidth, chosenWidth, chosenColor);
-					this.group.add ( box.getObj3D() );
-					this.boundingSpheres.push(box.geometry.computeBoundingSphere());
+					obj = new Box(0, 0, 0, width, width, width, color);
 					break;
 				case "Cone":
-					let cone = new Cone(chosenX, chosenY , chosenZ, chosenWidth, chosenWidth, chosenWidth, chosenColor);
-					this.group.add ( cone.getObj3D() );
-					this.boundingSpheres.push(cone.geometry.computeBoundingSphere());
+					obj = new Cone(0, 0, 0, width, width, width, color);
 					break;
 			}
 
+			let obj3D = obj.getObj3D();
+			obj3D.position.z = dist * Math.sin(phi) * Math.cos(theta);
+			obj3D.position.x = dist * Math.sin(theta) * Math.sin(phi);
+			obj3D.position.y = dist * Math.cos(phi);
+
+			this.group.add(obj3D);
+
+			if(obj3D.position.y >= 0) {
+				if(obj3D.position.x >=0) {
+					this.quadrants["north-east"].push(obj);
+					console.log("north-east");
+				} else {
+					this.quadrants["north-west"].push(obj);
+					console.log("north-west");
+				}
+			} else {
+				if(obj3D.position.x >=0) {
+					this.quadrants["south-east"].push(obj);
+					console.log("south-east");
+				} else {
+					this.quadrants["south-west"].push(obj);
+					console.log("south-west");
+				}
+			}
 		}
-
-		this.group.rotation.set(xRot, yRot, zRot);
-
 	}
 	//returns the object's bounding box
-	getBoundingBox(){
+	getBoundingSpheres(){
 		return this.boundingSpheres;
 	}
 

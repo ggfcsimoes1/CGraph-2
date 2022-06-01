@@ -9,6 +9,8 @@ var scene, renderer, currentCamera;
 
 var sphereRadius = 250;
 
+var cameraRadius = sphereRadius * 1.9
+
 /*Colors that will be used in the materials
 Respectively, blue, cyan, magenta, yellow, green*/
 var colors = [0x0000FF,0x00FFFF,0xFF00FF,0xFFFF00, 0x00FF00];
@@ -57,9 +59,9 @@ function createScene() {
 
     scene = new THREE.Scene ( ) ;
 
-    planet = new Planet ( 0,0,0, sphereRadius, 8, 8, colors );
-    ship = new Ship(0,sphereRadius*1.2,0, sphereRadius/5, 8, colors, THREE.MathUtils.degToRad(90), 0 , 0); // -------------Fix height
-    trash = new Trash( 0,0,0, sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20, 0, 0, 0);
+    planet = new Planet ( 0,0,0, sphereRadius, 30, 30, colors );
+    ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/5, 8, colors); // -------------Fix height
+    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 1);
 
     scene.add(planet.getGroup());
     scene.add(ship.getGroup());
@@ -71,49 +73,40 @@ function createScene() {
 function createCamera() {
     'use strict';
 
-    for ( var i = 0; i < 3; i++ ) {
-        var camera = new THREE.OrthographicCamera(  window.innerWidth / - 2, 
-                                                    window.innerWidth / 2, 
-                                                    window.innerHeight / 2, 
-                                                    window.innerHeight / - 2, 
-                                                    1, 
-                                                    10000 );
-        
-        switch( i ){
-            case 0:
-                //Frontal camera
-                camera.position.set( 0, 0, 1000 );
-                break;
-            case 1:
-                //Top camera
-                camera.position.set( 0, 1000, 0 );
-                break;
-            case 2: 
-                //Side camera
-                camera.position.set( 1000, 0, 0);
-                break;
-        }
-        camera.lookAt( scene.position );
-        cameras.push( camera );
-        currentCamera = cameras[0];
-    }
-    
+    var camera = new THREE.OrthographicCamera(  window.innerWidth / - 2, 
+                                                window.innerWidth / 2, 
+                                                window.innerHeight / 2, 
+                                                window.innerHeight / - 2, 
+                                                1, 
+                                                10000 );
+    camera.position.set( 0, 0, 1000 );
+    camera.lookAt( scene.position );
+    cameras.push( camera );
+
+    camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.set( 0, 0, 1000 );
+    camera.lookAt( scene.position );
+    cameras.push( camera );
+
+    cameras.push( new MovCamera(ship.theta + THREE.MathUtils.degToRad(30), ship.phi, cameraRadius, ship.getGroup().position));
+
+    currentCamera = cameras[0];
 }
 
 /*Function that handles the change of the camera*/
 function changePerspective(view){
     'use strict';
     switch(view){
-        case "front":
+        case "orthographic":
             currentCamera = cameras[0];
             currentCamera.lookAt(scene.position);
             break;
-        case "top":
+        case "perspective":
             currentCamera = cameras[1];
             currentCamera.lookAt(scene.position);
             break;
-        case "side":
-            currentCamera = cameras[2];
+        case "ship":
+            currentCamera = cameras[2].getCamera();
             currentCamera.lookAt(scene.position);
             break;
     }
@@ -151,16 +144,16 @@ function onKeyDown(e) {
 
     switch (e.keyCode) {
     case 49: //user pressed key 1, toggling normal view
-        changePerspective("front");  
-        console.log("front view");  
+        changePerspective("orthographic");  
+        console.log("orthographic view");  
         break;
     case 50: //user pressed key 2
-        changePerspective("top");
-        console.log("top view");
+        changePerspective("perspective");
+        console.log("perspective view");
         break;
     case 51:
-        changePerspective("side");
-        console.log("side view");
+        changePerspective("ship");
+        console.log("ship view");
         break;
     case 52:
         toggleWireframe();
@@ -213,21 +206,22 @@ function checkForMovements() {
     var delta = clock.getDelta();
 
     if ( keys.leftArrow )
-        ship.moveObject( "left", delta);
+        ship.moveObject( "left", delta, cameras[2]);
     if ( keys.rightArrow )
-        ship.moveObject( "right", delta );
+        ship.moveObject( "right", delta, cameras[2]);
     if ( keys.upArrow )
-        ship.moveObject( "up", delta );
+        ship.moveObject( "up", delta, cameras[2]);
     if ( keys.downArrow )
-        ship.moveObject( "down", delta );
+        ship.moveObject( "down", delta, cameras[2]);
 
+    
 }
 
 function checkForCollisions(){
     shipCollider = ship.getBoundingSphere();
-    trashColliders = trash.getBoundingSphere();
-    for (i = 0; i < trashColliders.length(); i++ ){
-        if ( trashColliders[i].intersectsBox(shipCollider) ){
+    trashColliders = trash.getBoundingSpheres();
+    for (i = 0; i < trashColliders.length; i++ ){
+        if ( shipCollider.intersectsSphere(trashColliders[i]) ){
             console.log("hi");
             break;
         } 
@@ -265,4 +259,5 @@ function animate() {
     requestAnimationFrame( animate );    
     render();
     checkForMovements();
+    //checkForCollisions();
 }
