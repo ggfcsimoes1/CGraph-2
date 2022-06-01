@@ -27,6 +27,7 @@ class Cone {
         cone.add ( this.mesh );
 
         this.obj3D = cone;
+        this.boundaryRadius = Math.max(2*radius, height)/2;
         
     }
     //returns the created mesh
@@ -40,6 +41,10 @@ class Cone {
     //returns the object's color
     getColor() {
         return this.color;
+    }
+    //returns the object's boundary radius
+    getBoundaryRadius(){
+        return this.boundaryRadius; 
     }
     setPositionSpherical(theta, phi, radius) {
         this.obj3D.position.z = radius * Math.sin(phi) * Math.cos(theta);

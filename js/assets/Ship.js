@@ -44,7 +44,7 @@ class Ship {
         this.camera = new MovCamera(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-110), 160, this.body.getObj3D().position);
         
         this.group.add(this.getCamera());
-        
+        this.boundaryRadius = this.bodyHeight;
         
     }
 
@@ -68,6 +68,11 @@ class Ship {
     getObj3D() {
         return this.obj3D;
     }
+    //returns the object's boundary radius
+    getBoundaryRadius(){
+        return this.boundaryRadius; 
+    }
+
     setPositionSpherical(theta, phi, radius) {
         this.theta = theta;
         this.phi = phi;

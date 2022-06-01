@@ -19,6 +19,7 @@ class Box {
         this.material = new THREE.MeshBasicMaterial ( { color: color, wireframe: false } );
         this.geometry = new THREE.BoxGeometry ( width, length, height );
         this.mesh = new THREE.Mesh ( this.geometry, this.material );
+        this.boundaryRadius = width*1.2;
         
         box = new THREE.Object3D ( );
         box.position.set ( x, y, z );
@@ -39,6 +40,10 @@ class Box {
     //returns the object's color
     getColor() {
         return this.color;
+    }
+    //returns the object's boundary radius
+    getBoundaryRadius(){
+        return this.boundaryRadius; 
     }
 
     setPositionSpherical(theta, phi, radius) {

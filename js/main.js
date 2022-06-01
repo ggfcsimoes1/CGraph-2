@@ -215,15 +215,41 @@ function checkForMovements() {
     
 }
 
+function wasCollision(obj1, ship){
+    obj1Position = obj1.getObj3D().position;
+    shipPosition = ship.getGroup().position;
+
+    return  ( obj1.getBoundaryRadius() + ship.getBoundaryRadius() ) ** 2 >= 
+            (obj1Position.x - shipPosition.x) ** 2 + 
+            (obj1Position.y - shipPosition.y) ** 2 + 
+            (obj1Position.z - shipPosition.z) ** 2;
+}
+
 function checkForCollisions(){
-    shipCollider = ship.getBoundingSphere();
-    trashColliders = trash.getBoundingSpheres();
-    for (i = 0; i < trashColliders.length; i++ ){
-        if ( shipCollider.intersectsSphere(trashColliders[i]) ){
-            console.log("hi");
-            break;
-        } 
+    let quadrant;
+    const shipObj = ship.getGroup();
+    if(shipObj.position.y >= 0) {
+        if(shipObj.position.x >=0) {
+            quadrant = trash.quadrants["north-east"];
+        } else {
+            quadrant = trash.quadrants["north-west"];
+        }
+    } else {
+        if(shipObj.position.x >=0) {
+            quadrant = trash.quadrants["south-east"];
+        } else {
+            quadrant = trash.quadrants["south-west"];
+        }
     }
+
+    for ( i = 0; i < quadrant.length; i++ )
+    if ( wasCollision(quadrant[i], ship) ){
+        console.log("collision");
+        quadrant[i].getMesh().visible = false;
+        quadrant.pop(quadrant[i])
+    }
+ 
+    
 }
 
 /*Shows the output in the browser according to the camera*/
@@ -257,5 +283,5 @@ function animate() {
     requestAnimationFrame( animate );    
     render();
     checkForMovements();
-    //checkForCollisions();
+    checkForCollisions();
 }
