@@ -165,14 +165,14 @@ class Ship {
                 aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
                 if(this.group.position.z >= 0)
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(-45));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(-225));
                 else
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(-225));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(-45));
                 break;
 
             case "up_right":
@@ -181,14 +181,14 @@ class Ship {
                 aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
                 if(this.group.position.z >= 0)
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(45));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(225));
                 else
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(225));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(45));
                 break;
 
             case "down_left":
@@ -197,14 +197,14 @@ class Ship {
                 aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
                 if(this.group.position.z >= 0)
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(225));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(45));
                 else
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(45));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(225));
                 break;
 
             case "down_right":
@@ -213,9 +213,9 @@ class Ship {
                 aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
                 if(this.group.position.z >= 0)
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                        this.setRotZ(THREE.MathUtils.degToRad(-225));
                     else
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                        this.setRotZ(THREE.MathUtils.degToRad(-45));
                 else
                     if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
                         this.setRotZ(THREE.MathUtils.degToRad(0));
