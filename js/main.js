@@ -61,7 +61,7 @@ function createScene() {
 
     planet = new Planet ( 0,0,0, sphereRadius, 30, 30, colors );
     ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/5, 8, colors, cameraRadius); // -------------Fix height
-    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 200);
+    trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20);
 
     scene.add(planet.getGroup());
     scene.add(ship.getGroup());
@@ -159,10 +159,11 @@ function onKeyDown(e) {
         break;
     case 37: //left arrow
         keys.leftArrow = true
-        console.log("Left arrow key press"); 
+        console.log("Left arrow key press");
         break;
     case 38: //up arrow
         keys.upArrow = true
+        //ship.setRotX(THREE.MathUtils.degToRad(-90));
         console.log("Up arrow key press"); 
         break;
     case 39: //right arrow
@@ -171,7 +172,8 @@ function onKeyDown(e) {
         break;
     case 40: //down arrow
         keys.downArrow = true
-        console.log("Down arrow key press"); 
+        //ship.setRotX(THREE.MathUtils.degToRad(90));
+        console.log("Down arrow key press");
         break;  
     }
 }
@@ -203,21 +205,29 @@ function checkForMovements() {
     //Get current time
     var delta = clock.getDelta();
 
-    if ( keys.leftArrow )
+    if ( keys.upArrow && keys.rightArrow)
+        ship.moveObject( "up_right", delta);
+    else if (keys.downArrow && keys.rightArrow)
+        ship.moveObject( "down_right", delta);
+    else if (keys.upArrow && keys.leftArrow)
+        ship.moveObject( "up_left");
+    else if (keys.downArrow && keys.leftArrow)
+        ship.moveObject( "down_left");
+    else if ( keys.leftArrow )
         ship.moveObject( "left", delta);
-    if ( keys.rightArrow )
+    else if ( keys.rightArrow )
         ship.moveObject( "right", delta);
-    if ( keys.upArrow )
+    else if ( keys.upArrow )
         ship.moveObject( "up", delta);
-    if ( keys.downArrow )
+    else if ( keys.downArrow )
         ship.moveObject( "down", delta);
 
     
 }
 
 function wasCollision(obj1, ship){
-    const obj1Position = obj1.getObj3D().position;
-    const shipPosition = ship.getGroup().position;
+    obj1Position = obj1.getObj3D().position;
+    shipPosition = ship.getGroup().position;
 
     return  ( obj1.getBoundaryRadius() + ship.getBoundaryRadius() ) ** 2 >= 
             (obj1Position.x - shipPosition.x) ** 2 + 
@@ -227,7 +237,7 @@ function wasCollision(obj1, ship){
 
 function checkForCollisions(){
     let quadrant;
-    let shipObj = ship.getGroup();
+    const shipObj = ship.getGroup();
     if(shipObj.position.y >= 0) {
         if(shipObj.position.x >=0) {
             quadrant = trash.quadrants["north-east"];
@@ -242,14 +252,15 @@ function checkForCollisions(){
         }
     }
 
-    for ( i = 0; i < quadrant.length; i++ ){
+    for ( i = 0; i < quadrant.length; i++ ) {
         if ( wasCollision(quadrant[i], ship) ){
+            console.log("collision");
             quadrant[i].getMesh().visible = false;
             quadrant.splice(i, 1);
+
+            console.log(quadrant.length);
         }
-    }
- 
-    
+    } 
 }
 
 /*Shows the output in the browser according to the camera*/

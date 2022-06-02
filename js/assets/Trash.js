@@ -61,6 +61,8 @@ class Trash{
 				}
 			}
 		}
+
+		console.log(this.quadrants["north-east"].length + this.quadrants["north-west"].length + this.quadrants["south-east"].length + this.quadrants["south-west"].length);
 	}
 	//returns the object's bounding box
 	getBoundingSpheres(){
