@@ -4,11 +4,12 @@ class MovCamera {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000);
+        this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000);
 
         this.camera.position.set(x, y, z);
 
-        this.lookAt(0, 0, 0 );
+        this.lookAt(0, 0, 0);
+        
     }
 
     lookAt(x, y, z) {

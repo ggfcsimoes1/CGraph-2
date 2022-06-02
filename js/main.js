@@ -60,7 +60,7 @@ function createScene() {
     scene = new THREE.Scene ( ) ;
 
     planet = new Planet ( 0,0,0, sphereRadius, 30, 30, colors );
-    ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/5, 8, colors, cameraRadius); // -------------Fix height
+    ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/10, 8, colors, cameraRadius); // -------------Fix height
     trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20);
 
     scene.add(planet.getGroup());
@@ -210,9 +210,9 @@ function checkForMovements() {
     else if (keys.downArrow && keys.rightArrow)
         ship.moveObject( "down_right", delta);
     else if (keys.upArrow && keys.leftArrow)
-        ship.moveObject( "up_left");
+        ship.moveObject( "up_left", delta);
     else if (keys.downArrow && keys.leftArrow)
-        ship.moveObject( "down_left");
+        ship.moveObject( "down_left", delta);
     else if ( keys.leftArrow )
         ship.moveObject( "left", delta);
     else if ( keys.rightArrow )
