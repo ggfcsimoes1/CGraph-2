@@ -5,7 +5,7 @@ It's composed of 4 capsules and 2 cylinders,
 which are aligned with eachother.
 */
 var ship;
-
+var totalRot = 0;
 class Ship {
     constructor ( theta, phi , radius, height, segs, colors , cameraRadius) {
         this.bodyHeight = height/2;
@@ -104,12 +104,20 @@ class Ship {
     setRotY(rot) {
         this.group.rotateY(rot);
     }
-
-    setRotZ(rot) {
-        this.group.rotateZ(rot);
+    
+    setRotZ(rot,clock_delta) {
+        var auxRot;
+        if (totalRot<=-360) { totalRot = -360; }
+        if (totalRot>=360) { totalRot = 360; }
+        if (totalRot <= rot)
+            auxRot = Math.min(totalRot+=clock_delta*2,rot);
+        if (totalRot > rot)
+            auxRot = Math.max(totalRot-=clock_delta*2,rot);
+            
+        this.group.rotateZ(auxRot);
     }
 
-   /*  getRotX() {
+   getRotX() {
         return this.group.rotation.x;
     }
 
@@ -119,7 +127,7 @@ class Ship {
 
     getRotZ() {
         return this.group.rotation.z;
-    } */
+    }
 
     /*Function responsible for translation movements*/
     moveObject(direction, clock_delta){
@@ -128,111 +136,63 @@ class Ship {
         this.camera.getCamera().rotation.x = THREE.MathUtils.degToRad(120);
         switch ( direction ) {
             case "up":
-                this.setPositionSpherical(this.theta , this.phi - THREE.MathUtils.degToRad(clock_delta * 70));
-                this.group.lookAt(0, 0, 0);
-                aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
-                if(this.group.position.z >= 0)
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
-                else
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
+                if (this.phi > THREE.MathUtils.degToRad(0)){
+                    this.setPositionSpherical(this.theta , this.phi - THREE.MathUtils.degToRad(clock_delta * 70));
+                    this.group.lookAt(0, 0, 0);
+                    this.setRotZ(THREE.MathUtils.degToRad(0), clock_delta);
+                }
                 break;
 
             case "down":
-                this.setPositionSpherical(this.theta , this.phi + THREE.MathUtils.degToRad(clock_delta * 70));
-                this.group.lookAt(0, 0, 0);
-                aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
-                if(this.group.position.z >= 0)
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
-                else
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                if (this.phi < THREE.MathUtils.degToRad(180)){
+                    this.setPositionSpherical(this.theta , this.phi + THREE.MathUtils.degToRad(clock_delta * 70));
+                    this.group.lookAt(0, 0, 0);
+                    this.setRotZ(THREE.MathUtils.degToRad(180), clock_delta);
+                }
                 break;
 
             case "up_left":
-                this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 35) , this.phi - THREE.MathUtils.degToRad(clock_delta * 35));
-                this.group.lookAt(0, 0, 0);
-                aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
-                if(this.group.position.z >= 0)
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(-45));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(-225));
-                else
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(-225));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(-45));
+                if (this.phi > THREE.MathUtils.degToRad(0)){
+                    this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 35) , this.phi - THREE.MathUtils.degToRad(clock_delta * 35));
+                    this.group.lookAt(0, 0, 0);
+                    this.setRotZ(THREE.MathUtils.degToRad(-45), clock_delta);
+                }
                 break;
 
             case "up_right":
-                this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 35) , this.phi - THREE.MathUtils.degToRad(clock_delta * 35));
-                this.group.lookAt(0, 0, 0);
-                aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
-                if(this.group.position.z >= 0)
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(45));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(225));
-                else
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(225));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(45));
+                if (this.phi > THREE.MathUtils.degToRad(0)){
+                    this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 35) , this.phi - THREE.MathUtils.degToRad(clock_delta * 35));
+                    this.group.lookAt(0, 0, 0);
+                    this.setRotZ(THREE.MathUtils.degToRad(45), clock_delta);
+                }
                 break;
 
             case "down_left":
-                this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 35) , this.phi + THREE.MathUtils.degToRad(clock_delta * 35));
-                this.group.lookAt(0, 0, 0);
-                aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
-                if(this.group.position.z >= 0)
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(225));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(45));
-                else
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(45));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(225));
+                if (this.phi < THREE.MathUtils.degToRad(180)){
+                    this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 35) , this.phi + THREE.MathUtils.degToRad(clock_delta * 35));
+                    this.group.lookAt(0, 0, 0);
+                    this.setRotZ(THREE.MathUtils.degToRad(-225), clock_delta);
+                }
                 break;
 
             case "down_right":
-                this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 35) , this.phi + THREE.MathUtils.degToRad(clock_delta * 70));
-                this.group.lookAt(0, 0, 0);
-                aux = (this.theta + THREE.MathUtils.degToRad(360)) % THREE.MathUtils.degToRad(360);
-                if(this.group.position.z >= 0)
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(-225));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(-45));
-                else
-                    if( aux >= THREE.MathUtils.degToRad(270) || aux <= THREE.MathUtils.degToRad(90))
-                        this.setRotZ(THREE.MathUtils.degToRad(0));
-                    else
-                        this.setRotZ(THREE.MathUtils.degToRad(180));
+                if (this.phi < THREE.MathUtils.degToRad(180)){
+                    this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 35) , this.phi + THREE.MathUtils.degToRad(clock_delta * 70));
+                    this.group.lookAt(0, 0, 0);
+                    this.setRotZ(THREE.MathUtils.degToRad(225), clock_delta);
+                }
                 break;
 
             case "left":
                 this.setPositionSpherical(this.theta - THREE.MathUtils.degToRad(clock_delta * 70), this.phi );
                 this.group.lookAt(0, 0, 0);
-                this.setRotZ(THREE.MathUtils.degToRad(-90));
+                this.setRotZ(THREE.MathUtils.degToRad(-90), clock_delta);
                 break;
 
             case "right":
                 this.setPositionSpherical(this.theta + THREE.MathUtils.degToRad(clock_delta * 70), this.phi );
                 this.group.lookAt(0, 0, 0);
-                this.setRotZ(THREE.MathUtils.degToRad(90));
+                this.setRotZ(THREE.MathUtils.degToRad(90), clock_delta);
                 break;
         } 
         

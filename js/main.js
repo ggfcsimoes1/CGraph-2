@@ -7,7 +7,7 @@ var clock = new THREE.Clock();
 
 var scene, renderer, currentCamera;
 
-var sphereRadius = 250;
+var sphereRadius = 350;
 
 var cameraRadius = sphereRadius * 1.9
 
