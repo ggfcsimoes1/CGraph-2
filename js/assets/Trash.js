@@ -1,7 +1,10 @@
 /*
-trash created in the game
+Trash created in the game
 */
 var trash;
+
+//Possible forms for trash object that can be chosen
+var trashForms = ["Box", "Cone"];
 
 class Trash{
 	constructor ( dist, minWidth, maxWidth, numObjs=20) {
@@ -9,6 +12,7 @@ class Trash{
         this.minWidth = minWidth;
 		this.maxWidth = maxWidth;
 
+		//Dict to create 4 arrays according to the quadrant 
 		this.quadrants = {	"north-west": [], 
 							"north-east": [], 
 							"south-west": [], 
@@ -17,12 +21,19 @@ class Trash{
 
 		this.group = new THREE.Group ( );
 
+		//For cycle to randomly create trash objects 
 		for(let i = 1; i <= numObjs; i++){
 
+			//Pick random form
 			let chosenForm = trashForms[ Math.floor( Math.random() * trashForms.length )];
+
+			//Pick random color
 			let color = colors[ Math.floor( Math.random() * colors.length )];
+
+			//Get random number between [minWidth, maxWidth[
 			let width = Math.random() * ( maxWidth - minWidth ) + minWidth;
 
+			//Get random spherical coordinates 
 			let theta = THREE.MathUtils.degToRad(Math.random() * 360);
 			let phi = THREE.MathUtils.degToRad(Math.random() * 360);
 
@@ -43,6 +54,7 @@ class Trash{
 
 			this.group.add(obj3D);
 
+			//Save the object in the right quadrant
 			if(obj3D.position.y >= 0) {
 				if(obj3D.position.x >=0) {
 					this.quadrants["north-east"].push(obj);
@@ -64,16 +76,16 @@ class Trash{
 
 		console.log(this.quadrants["north-east"].length + this.quadrants["north-west"].length + this.quadrants["south-east"].length + this.quadrants["south-west"].length);
 	}
-	//returns the object's bounding box
+	//Returns the object's bounding box
 	getBoundingSpheres(){
 		return this.boundingSpheres;
 	}
 
-	//returns the object's color
+	//Returns the object's color
 	getColor() {
 		return this.color;
 	}
-	//returns the group created in the constructor
+	//Returns the group created in the constructor
 	getGroup() {
 		return this.group;
 	}

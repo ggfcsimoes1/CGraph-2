@@ -1,4 +1,6 @@
-
+/*
+Camera that is used in the game for the ship view
+*/
 class MovCamera {
     constructor ( x, y, z) {
         this.x = x;
@@ -11,11 +13,11 @@ class MovCamera {
         this.lookAt(0, 0, 0);
         
     }
-
+    //look at the respective coordinate
     lookAt(x, y, z) {
         this.camera.lookAt(x, y, z);
     }
-
+    //return the camera itself
     getCamera(){
         return this.camera;
     }

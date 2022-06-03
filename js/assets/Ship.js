@@ -42,16 +42,19 @@ class Ship {
 
         this.setPositionSpherical(theta, phi);
 
+        //Camera Creation
         this.camera = new MovCamera(0, -100, -100);
         
         this.group.add(this.getCamera());
+        
+        //Used for detection of collisions
         this.boundaryRadius = this.bodyHeight;
 
         /* const axesHelper = new THREE.AxesHelper( 100 );
         this.group.add(axesHelper); */
         
     }
-
+    //return ship's camera
     getCamera() {
         return this.camera.getCamera();
     }
@@ -76,35 +79,37 @@ class Ship {
     getBoundaryRadius(){
         return this.boundaryRadius; 
     }
-
+    //set object's position with spherical coordinates
     setPositionSpherical(theta, phi) {
         this.theta = theta;
         this.phi = phi;
+
+        //Spherical to cartesian coordinates conversion
         this.setPosition(this.radius * Math.sin(theta) * Math.sin(phi),
                         this.radius * Math.cos(phi),
                         this.radius * Math.sin(phi) * Math.cos(theta));
     }
-
+    //set object's position with cartesian coordinates
     setPosition(x, y, z) {
         this.group.position.x = x;
         this.group.position.y = y;
         this.group.position.z = z;
     }
-
+    //reset object's rotation
     resetRotation() {
         this.group.rotateX(-this.rotX);
         this.group.rotateY(-this.rotY);
         this.group.rotateZ(-this.rotZ);
     }
-
+    //rotate object's geometry about the X axis
     setRotX(rot) {
         this.group.rotateX(rot);
     }
-
+    //rotate object's geometry about the Y axis
     setRotY(rot) {
         this.group.rotateY(rot);
     }
-    
+    //rotate object's geometry about the Z axis
     setRotZ(rot,clock_delta) {
         var auxRot;
         if (totalRot<=-360) { totalRot = -360; }
@@ -116,22 +121,21 @@ class Ship {
             
         this.group.rotateZ(auxRot);
     }
-
-   getRotX() {
+    //return group rotation about the X axis
+    getRotX() {
         return this.group.rotation.x;
     }
-
+    //return group rotation about the Y axis
     getRotY() {
         return this.group.rotation.y;
     }
-
+    //return group rotation about the z axis
     getRotZ() {
         return this.group.rotation.z;
     }
 
-    /*Function responsible for translation movements*/
+    //function responsible for translation movements
     moveObject(direction, clock_delta){
-        let aux;
         this.resetRotation();
         this.camera.getCamera().rotation.x = THREE.MathUtils.degToRad(120);
         switch ( direction ) {

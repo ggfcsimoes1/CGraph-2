@@ -15,8 +15,6 @@ var cameraRadius = sphereRadius * 1.9
 Respectively, blue, cyan, magenta, yellow, green*/
 var colors = [0x0000FF,0x00FFFF,0xFF00FF,0xFFFF00, 0x00FF00];
 
-var trashForms = ["Box", "Cone"];//--------------------------------change place
-
 //auxiliary object that holds the pressed 
 //status of every key used in the program
 let keys = {
@@ -122,7 +120,7 @@ function onKeyDown(e) {
         changePerspective("perspective");
         console.log("perspective view");
         break;
-    case 51:
+    case 51: //user pressed key 3
         changePerspective("ship");
         console.log("ship view");
         break;
@@ -198,16 +196,19 @@ function checkForMovements() {
     
 }
 
+/*Auxiliary function to check if the ship collides with respective trash object*/
 function wasCollision(obj1, ship){
     obj1Position = obj1.getObj3D().position;
     shipPosition = ship.getGroup().position;
 
+    //Sphere - sphere collission detection
     return  ( obj1.getBoundaryRadius() + ship.getBoundaryRadius() ) ** 2 >= 
             (obj1Position.x - shipPosition.x) ** 2 + 
             (obj1Position.y - shipPosition.y) ** 2 + 
             (obj1Position.z - shipPosition.z) ** 2;
 }
 
+/*Function responsible to check collisions*/
 function checkForCollisions(){
     let quadrant;
     const shipObj = ship.getGroup();
@@ -225,12 +226,14 @@ function checkForCollisions(){
         }
     }
 
+    //Iterate every thrash object according to the quadrant where the ship is located
     for ( i = 0; i < quadrant.length; i++ ) {
         if ( wasCollision(quadrant[i], ship) ){
             console.log("collision");
             quadrant[i].getMesh().visible = false;
-            quadrant.splice(i, 1);
 
+            //Remove trash object from the array
+            quadrant.splice(i, 1);
             console.log(quadrant.length);
         }
     } 

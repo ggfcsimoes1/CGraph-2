@@ -38,6 +38,7 @@ class Cylinder {
     getColor() {
         return this.color;
     }
+    //set cylinder's position with spherical coordinates
     setPositionSpherical(theta, phi, radius) {
         this.obj3D.position.z = radius * Math.sin(phi) * Math.cos(theta);
         this.obj3D.position.x = radius * Math.sin(theta) * Math.sin(phi);
