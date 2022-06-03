@@ -7,7 +7,7 @@ var clock = new THREE.Clock();
 
 var scene, renderer, currentCamera;
 
-var sphereRadius = 350;
+var sphereRadius = 300;
 
 var cameraRadius = sphereRadius * 1.9
 
@@ -26,33 +26,6 @@ let keys = {
     downArrow : false
 }
 
-/*Function responsible for rotating objects of the group*/
-function rotateObjects(group, clock_delta, reverseDirection=false, articulate = false, isPyramid = false){
-    var value;
-    var i=0;
-    value =  reverseDirection ? -70 * clock_delta : 70 * clock_delta;
-    
-    if ( !articulate ){
-        if ( isPyramid ) {
-            group.traverse(function (node) {
-                if (node instanceof THREE.Mesh) {
-                    if (i==2 || i == 3){ //getting the pyramid meshes
-                        node.rotateZ( THREE.MathUtils.degToRad( value ) );
-                    }
-                    i++;
-                }
-            });
-        } else {
-            group.rotateX( THREE.MathUtils.degToRad( value ) );
-            group.rotateY( THREE.MathUtils.degToRad( value ) );
-        }
-    } else {  
-        group.rotateY( THREE.MathUtils.degToRad( value ) );
-    }
-
-    
-}
-
 /*Function responsible for creating all the objects and scene*/
 function createScene() {
     'use strict';
@@ -60,7 +33,7 @@ function createScene() {
     scene = new THREE.Scene ( ) ;
 
     planet = new Planet ( 0,0,0, sphereRadius, 30, 30, colors );
-    ship = new Ship(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), sphereRadius*1.2, sphereRadius/10, 8, colors, cameraRadius); // -------------Fix height
+    ship = new Ship(THREE.MathUtils.degToRad(Math.random() * 360), THREE.MathUtils.degToRad(Math.random() * 360), sphereRadius*1.2, sphereRadius/10, 8, colors, cameraRadius); // -------------Fix height
     trash = new Trash( sphereRadius*1.2, sphereRadius/24, sphereRadius/20, 20);
 
     scene.add(planet.getGroup());

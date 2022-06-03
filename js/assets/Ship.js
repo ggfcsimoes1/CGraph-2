@@ -47,8 +47,8 @@ class Ship {
         this.group.add(this.getCamera());
         this.boundaryRadius = this.bodyHeight;
 
-        const axesHelper = new THREE.AxesHelper( 100 );
-        this.group.add(axesHelper);
+        /* const axesHelper = new THREE.AxesHelper( 100 );
+        this.group.add(axesHelper); */
         
     }
 
